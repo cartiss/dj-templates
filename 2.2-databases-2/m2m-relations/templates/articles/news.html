@@ -15,8 +15,8 @@
               <a href="#">{{ article.title }}</a>
             </h4>
             <p class="card-text">{{ article.text }}</p>
-            {% for tag in article.tags.all %}
-              <span class="badge {% if tag.is_main %}badge-primary{% else %}badge-secondary{% endif %}">{{ tag.name }}</span>
+            {% for t in article.t1.all %}
+              <span class="badge {% if t.is_main %}badge-primary{% else %}badge-secondary{% endif %}">{{ t.tag.name }}</span>
             {% endfor %}
           </div>
         </div>

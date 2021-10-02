@@ -6,15 +6,16 @@ from .models import Article, Tags
 
 class ArticleTagsM2MInlineFormset(BaseInlineFormSet):
     def clean(self):
+        counter_topics = 0
         for form in self.forms:
-            # В form.cleaned_data будет словарь с данными
-            # каждой отдельной формы, которые вы можете проверить
-            form.cleaned_data
-            # вызовом исключения ValidationError можно указать админке о наличие ошибки
-            # таким образом объект не будет сохранен,
-            # а пользователю выведется соответствующее сообщение об ошибке
-            raise ValidationError('Тут всегда ошибка')
-        return super().clean()  # вызываем базовый код переопределяемого метода
+            if form.cleaned_data and form.cleaned_data['is_main']:
+                counter_topics += 1
+
+        if counter_topics == 0:
+            raise ValidationError('Выберите основной раздел статьи')
+        if counter_topics > 1:
+            raise ValidationError('Основным может быть только один раздел')
+        return super().clean()
 
 @admin.register(Tags)
 class TagsAdmin(admin.ModelAdmin):
