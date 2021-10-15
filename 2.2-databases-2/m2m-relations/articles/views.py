@@ -5,7 +5,7 @@ from articles.models import Article
 
 def articles_list(request):
     template = 'articles/news.html'
-    object_list = Article.objects.all().prefetch_related('tags')
+    object_list = Article.objects.all().prefetch_related('t1', 't1__tag')
 
 
     context = {
