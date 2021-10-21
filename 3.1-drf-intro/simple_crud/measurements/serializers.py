@@ -6,9 +6,9 @@ from measurements.models import *
 class ProjectSerializer(ModelSerializer):
     class Meta:
         model = Project
-        fields = "name, updated_at"
+        fields = "__all__"
 
 class MeasurementSerializer(ModelSerializer):
     class Meta:
         model = Measurement
-        fields = "value, project, updated_at"
+        fields = "__all__"
