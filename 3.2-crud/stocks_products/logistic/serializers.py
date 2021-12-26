@@ -25,7 +25,7 @@ class StockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stock
-        fields = 'id, address, positions'
+        fields = '__all__'
 
     def validate_positions(self, value):
         if not value:
@@ -43,9 +43,8 @@ class StockSerializer(serializers.ModelSerializer):
         # создаем склад по его параметрам
         stock = super().create(validated_data)
 
-        # здесь вам надо заполнить связанные таблицы
-        # в нашем случае: таблицу StockProduct
-        # с помощью списка positions
+        stock.positions = positions
+        stock.save()
 
         return stock
 
@@ -55,6 +54,8 @@ class StockSerializer(serializers.ModelSerializer):
 
         # обновляем склад по его параметрам
         stock = super().update(instance, validated_data)
+        stock.positions = positions
+        stock.save()
 
         # здесь вам надо обновить связанные таблицы
         # в нашем случае: таблицу StockProduct
