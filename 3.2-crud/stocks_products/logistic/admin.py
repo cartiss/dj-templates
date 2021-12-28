@@ -1,15 +1,24 @@
 from django.contrib import admin
 
 # Register your models here.
-from logistic.models import Stock, Product
+from logistic.models import Stock, Product, StockProduct
+
+
+class ProductStockInline(admin.TabularInline):
+    model = StockProduct
 
 
 class ProductAdmin(admin.ModelAdmin):
-    pass
+    inlines = [
+        ProductStockInline,
+    ]
 
 
 class StockAdmin(admin.ModelAdmin):
-    pass
+    inlines = [
+        ProductStockInline,
+    ]
+    exclude = ('products',)
 
 
 admin.site.register(Product, ProductAdmin)

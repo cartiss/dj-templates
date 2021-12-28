@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from logistic.models import Product, Stock
+from logistic.models import Product, Stock, StockProduct
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -12,6 +12,11 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class ProductPositionSerializer(serializers.ModelSerializer):
     # настройте сериализатор для позиции продукта на складе
+
+    class Meta:
+        model = StockProduct
+        fields = '__all__'
+
     product = serializers.PrimaryKeyRelatedField(
         queryset=Product.objects.all(),
         required=True,
