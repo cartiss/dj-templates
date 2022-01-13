@@ -49,7 +49,7 @@ class StockSerializer(serializers.ModelSerializer):
         stock = super().create(validated_data)
 
         for item in positions:
-            item['stock'] = self.request.user
+            item['stock'] = self.context['request'].user.id
 
         stock.positions = positions
         stock.save()
@@ -64,7 +64,7 @@ class StockSerializer(serializers.ModelSerializer):
         stock = super().update(instance, validated_data)
 
         for item in positions:
-            item['stock'] = self.request.user
+            item['stock'] = self.context['request'].user.id
 
         stock.positions = positions
         stock.save()
