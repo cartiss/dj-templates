@@ -48,6 +48,9 @@ class StockSerializer(serializers.ModelSerializer):
         # создаем склад по его параметрам
         stock = super().create(validated_data)
 
+        for item in positions:
+            item['stock'] = self.context['request'].user
+
         stock.positions = positions
         stock.save()
 
@@ -59,11 +62,11 @@ class StockSerializer(serializers.ModelSerializer):
 
         # обновляем склад по его параметрам
         stock = super().update(instance, validated_data)
+
+        for item in positions:
+            item['stock'] = self.context['request'].user
+
         stock.positions = positions
         stock.save()
-
-        # здесь вам надо обновить связанные таблицы
-        # в нашем случае: таблицу StockProduct
-        # с помощью списка positions
 
         return stock

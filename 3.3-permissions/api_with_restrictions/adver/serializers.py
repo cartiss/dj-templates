@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from advertisements.models import Advertisement
+from adver.models import Adver
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
                   'last_name',)
 
 
-class AdvertisementSerializer(serializers.ModelSerializer):
+class AdverSerializer(serializers.ModelSerializer):
     """Serializer для объявления."""
 
     creator = UserSerializer(
@@ -21,7 +21,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = Advertisement
+        model = Adver
         fields = ('id', 'title', 'description', 'creator',
                   'status', 'created_at', )
 
@@ -34,6 +34,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """Метод для валидации. Вызывается при создании и обновлении."""
 
-        # TODO: добавьте требуемую валидацию
-
+        # if countOfOpenAdver <= 10:
+        #     return data
+        # raise Exception("Слишком много объявлений открытых!")
         return data

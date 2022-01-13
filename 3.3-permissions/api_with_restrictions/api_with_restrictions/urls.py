@@ -19,10 +19,10 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from rest_framework.routers import DefaultRouter
 
-from advertisements.views import AdvertisementViewSet
+from adver.views import AdvertisementViewSet
 
 router = DefaultRouter()
-router.register('advertisements', AdvertisementViewSet)
+router.register('adver', AdvertisementViewSet)
 
 
 urlpatterns = [
