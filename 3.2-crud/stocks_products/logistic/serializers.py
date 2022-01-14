@@ -36,10 +36,12 @@ class StockSerializer(serializers.ModelSerializer):
         if not value:
             raise serializers.ValidationError("No position")
 
-        product_ids = [item['products'].id for item in value]
+        product_ids = [item['product'].id for item in value]
 
         if len(product_ids) != len(set(product_ids)):
             raise serializers.ValidationError('Дублируются позиции на складе')
+
+        return value
 
     def create(self, validated_data):
         # достаем связанные данные для других таблиц
