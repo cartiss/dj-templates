@@ -59,9 +59,6 @@ class StockSerializer(serializers.ModelSerializer):
         if not instance:
             return ValidationError('Bad request (no object)')
 
-        instance.address = validated_data.get('address', instance.address)
-        instance.positions = validated_data.get('positions', instance.positions)
-
         stock = super().update(instance, validated_data)
 
         for item in stock.positions:
