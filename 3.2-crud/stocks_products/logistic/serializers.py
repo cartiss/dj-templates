@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from logistic.models import Product, Stock, StockProduct
 
@@ -44,31 +45,28 @@ class StockSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        # достаем связанные данные для других таблиц
-        positions = validated_data.pop('positions')
-
-        # создаем склад по его параметрам
         stock = super().create(validated_data)
 
-        for item in positions:
-            item['stock'] = self.context['request'].user.id
+        for item in stock.positions:
+            item['stock'] = stock.id
 
-        stock.positions = positions
         stock.save()
 
         return stock
 
     def update(self, instance, validated_data):
-        # достаем связанные данные для других таблиц
-        positions = validated_data.pop('positions')
 
-        # обновляем склад по его параметрам
+        if not instance:
+            return ValidationError('Bad request (no object)')
+
+        instance.address = validated_data.get('address', instance.address)
+        instance.positions = validated_data.get('positions', instance.positions)
+
         stock = super().update(instance, validated_data)
 
-        for item in positions:
-            item['stock'] = self.context['request'].user.id
+        for item in stock.positions:
+            item['stock'] = stock.id
 
-        stock.positions = positions
         stock.save()
 
         return stock
