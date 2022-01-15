@@ -34,7 +34,7 @@ class AdverSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """Метод для валидации. Вызывается при создании и обновлении."""
 
-        # if countOfOpenAdver <= 10:
-        #     return data
-        # raise Exception("Слишком много объявлений открытых!")
-        return data
+        if len(Adver.objects.filter(status='OPEN')) <= 10:
+            return data
+
+        raise Exception("Слишком много объявлений открытых!")
