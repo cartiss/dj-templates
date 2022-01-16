@@ -45,24 +45,34 @@ class StockSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
+        positions = validated_data.pop('positions')
+
         stock = super().create(validated_data)
 
-        for item in stock.positions:
-            item['stock'] = stock.id
+        for item in positions:
+            StockProduct.objects.create(stock=stock.id, product=item['product'],
+                                        quantity=item['quantity'], price=item['price'])
 
         stock.save()
 
         return stock
 
     def update(self, instance, validated_data):
+        positions = validated_data.pop('positions')
 
         if not instance:
             return ValidationError('Bad request (no object)')
 
         stock = super().update(instance, validated_data)
 
-        for item in stock.positions:
-            item['stock'] = stock.id
+        for item in positions:
+            StockProduct.objects.update_or_create(
+                stock=stock, product=item['product'],
+                defaults={
+                    'quantity': item['quantity'],
+                    'price': item['price']
+                }
+            )
 
         stock.save()
 
