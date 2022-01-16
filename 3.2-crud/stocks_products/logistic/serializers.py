@@ -50,7 +50,7 @@ class StockSerializer(serializers.ModelSerializer):
         stock = super().create(validated_data)
 
         for item in positions:
-            StockProduct.objects.create(stock=stock.id, product=item['product'],
+            StockProduct.objects.create(stock=stock, product=item['product'],
                                         quantity=item['quantity'], price=item['price'])
 
         stock.save()
