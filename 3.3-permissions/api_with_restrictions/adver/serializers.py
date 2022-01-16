@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from adver.models import Adver
 
@@ -28,8 +29,16 @@ class AdverSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Метод для создания"""
 
-        validated_data["creator"] = self.context["request"].user
+        validated_data["creator"] = self.context['request'].user
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        if validated_data["creator"] != self.context['request'].user:
+            raise ValidationError('You can\'t update this advert!')
+
+        adver = super().update(instance, validated_data)
+
+        return adver
 
     def validate(self, data):
         """Метод для валидации. Вызывается при создании и обновлении."""
