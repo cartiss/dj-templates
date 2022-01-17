@@ -10,4 +10,4 @@ class AdverFilter(filters.FilterSet):
 
     class Meta:
         model = Adver
-        fields = ['date', 'status']
+        fields = ('date', 'status')
