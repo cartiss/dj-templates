@@ -6,8 +6,8 @@ from adver.models import Adver
 class AdverFilter(filters.FilterSet):
     """Фильтры для объявлений."""
 
-    date = DateFromToRangeFilter()
+    created_at = DateFromToRangeFilter()
 
     class Meta:
         model = Adver
-        fields = ('date', 'status')
+        fields = ('created_at', 'status')
