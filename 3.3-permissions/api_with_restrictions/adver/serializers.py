@@ -46,4 +46,4 @@ class AdverSerializer(serializers.ModelSerializer):
         if len(Adver.objects.filter(status='OPEN')) <= 10:
             return data
 
-        raise Exception("Слишком много объявлений открытых!")
+        raise ValidationError("Слишком много объявлений открытых!")

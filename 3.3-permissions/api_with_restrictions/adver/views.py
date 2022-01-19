@@ -24,7 +24,7 @@ class AdvertisementViewSet(ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         if request["creator"] != self.context['request'].user:
-            raise ValidationError('You can\'t update this advert!')
+            raise ValidationError('You can\'t delete this advert!')
 
         return super().destroy(request, *args, **kwargs)
 
