@@ -1,6 +1,7 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from adver.filters import AdverFilter
@@ -23,8 +24,8 @@ class AdvertisementViewSet(ModelViewSet):
         return []
 
     def destroy(self, request, *args, **kwargs):
-        if request["creator"] != self.context['request'].user:
-            raise ValidationError('You can\'t delete this advert!')
+        if request.user != self.get_object().creator:
+            return Response("Вы не можете удалять это объявление", status=403)
 
         return super().destroy(request, *args, **kwargs)
 
