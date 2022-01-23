@@ -33,7 +33,7 @@ class AdverSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
-        if validated_data["creator"] != self.context['request'].user:
+        if instance.creator != self.context['request'].user:
             raise ValidationError('You can\'t update this advert!')
 
         adver = super().update(instance, validated_data)
@@ -41,9 +41,9 @@ class AdverSerializer(serializers.ModelSerializer):
         return adver
 
     def validate(self, data):
-        """Метод для валидации. Вызывается при создании и обновлении."""
+        if self.context['request'].method == 'POST' or data['status'] == 'OPEN':
+            if Adver.objects.filter(status='OPEN', creator=self.context['request'].user).count() > 10:
+                raise ValidationError("Слишком много объявлений открытых!")
 
-        if len(Adver.objects.filter(status='OPEN')) <= 10:
-            return data
+        return data
 
-        raise ValidationError("Слишком много объявлений открытых!")
