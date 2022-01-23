@@ -41,7 +41,7 @@ class AdverSerializer(serializers.ModelSerializer):
         return adver
 
     def validate(self, data):
-        if self.context['request'].method == 'POST' or data['status'] == 'OPEN':
+        if self.context['request'].method == 'POST' or data.get('status') == 'OPEN':
             if Adver.objects.filter(status='OPEN', creator=self.context['request'].user).count() > 10:
                 raise ValidationError("Слишком много объявлений открытых!")
 
