@@ -2,7 +2,7 @@ import pdb
 
 import pytest
 from model_bakery import baker
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_301_MOVED_PERMANENTLY
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_301_MOVED_PERMANENTLY, HTTP_204_NO_CONTENT
 from rest_framework.test import APIClient
 
 from students.models import Course
@@ -86,17 +86,18 @@ def test_update_course(api_client, course_factory):
         'name': 'TestUpdate',
         'students': []
     }
-    url = f'http://127.0.0.1:8000/api/v1/courses/{course.id}'
+    url = f'http://127.0.0.1:8000/api/v1/courses/{course.id}/'
     response = api_client.put(url, data)
-    assert response.status_code == HTTP_301_MOVED_PERMANENTLY
+    assert response.status_code == HTTP_200_OK
     assert response.json()['name'] == data['name']
 
 
 @pytest.mark.django_db
 def test_delete_course(api_client, course_factory):
     course = course_factory(name='TestCreate1')
-    url = f'http://127.0.0.1:8000/api/v1/courses/{course.id}'
+    url = f'http://127.0.0.1:8000/api/v1/courses/{course.id}/'
     response = api_client.delete(url)
-    assert response.status_code == HTTP_301_MOVED_PERMANENTLY
+
+    assert response.status_code == HTTP_204_NO_CONTENT
 
 
